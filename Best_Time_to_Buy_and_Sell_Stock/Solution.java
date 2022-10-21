@@ -1,3 +1,4 @@
+import java.util.*;
 class Solution {
     public int maxProfit(int[] prices) {
         int min_val = Integer.MAX_VALUE, max_val = 0;
@@ -7,4 +8,5 @@ class Solution {
         }
         return max_val;
     }
+    public static void main(String[] args) throws Exception {}
 }
