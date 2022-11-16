@@ -1,0 +1,24 @@
+import java.util.*;
+class Solution {
+    public static List<List<Integer>> combinationSum3(int k, int n) {
+        List<Integer> ans=new ArrayList();
+        List<List<Integer>> res=new ArrayList();
+        combin(k, n, 1, ans, res);
+        return res;
+    }
+    public static void combin(int k, int n, int index, List<Integer> ans, List<List<Integer>> res)
+    {
+        if(k==0 && n==0)
+        {
+            res.add(new ArrayList(ans));
+            return;
+        }
+        for(int i=index;i<10;i++)
+        {
+            ans.add(i);
+            combin(k-1, n-i, i+1, ans, res);
+            ans.remove(ans.size()-1);
+        }
+    }
+    public static void main(String[] args) throws Exception {}
+}
