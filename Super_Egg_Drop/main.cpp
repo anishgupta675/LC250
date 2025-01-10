@@ -1,23 +1,31 @@
 class Solution {
-    unordered_map<int, int> lookup;
 public:
     int superEggDrop(int k, int n) {
+        if(!n || n == 1) return n;
         if(k == 1) return n;
-        if(!n) return 0;
-        if(lookup.find(n * 200 + k) == lookup.end()) {
-            int low = 1, high = n;
-            while(low + 1 < high) {
-                int mid = (low + high) >> 1, nummoves1 = superEggDrop(k - 1, mid - 1), nummoves2 = superEggDrop(k, mid);
-                if(nummoves1 < nummoves2) low = mid;
-                else if(nummoves1 > nummoves2) high = mid;
-                else {
-                    low = mid;
-                    high = mid;
-                    break;
-                }
-            }
-            lookup[n * 200 + k] = 1 + min(max(superEggDrop(k - 1, low - 1), superEggDrop(k, n - low)), max(superEggDrop(k - 1, high - 1), superEggDrop(k, n - high)));
+        vector<vector<int>> dp(k + 1, vector<int>(n + 1, 0));
+        for(int i = 0; i <= k; i++) {
+            dp[i][0] = 0;
+            dp[i][1] = 1;
         }
-        return lookup[n * 200 + k];
+        for(int i = 0; i <= n; i++) {
+            dp[0][i] = 0;
+            dp[1][i] = 1;
+        }
+        for(int i = 2; i <= k; i++) {
+            for(int j = 2; j <= n; j++) {
+                int l = 1, r = j, temp = 0, ans = INT_MAX;
+                while(l <= r) {
+                    int mid = (l + r) >> 1;
+                    int low = dp[i - 1][mid - 1], high = dp[i][j - mid];
+                    temp = 1 + max(low, high);
+                    if(low < high) l = mid + 1;
+                    else r = mid - 1;
+                    ans = min(ans, temp);
+                }
+                dp[i][j] = ans;
+            }
+        }
+        return dp[k][n];
     }
 };
